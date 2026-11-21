@@ -1,0 +1,23 @@
+{
+  "name": "smart-cv-maker-pro",
+  "version": "1.0.0",
+  "description": "Smart CV Maker Pro - Create and download professional resumes",
+  "main": "smart-cv-maker-pro-1.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sohel3839/Cv-maker-website-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sohel3839/Cv-maker-website-/issues"
+  },
+  "homepage": "https://github.com/sohel3839/Cv-maker-website-#readme",
+  "dependencies": {
+    "@vercel/speed-insights": "^2.1.0"
+  }
+}
