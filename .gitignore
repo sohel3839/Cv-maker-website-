@@ -1,0 +1,8 @@
+# Dependencies
+node_modules/
+
+# Optional: Add other common files to ignore
+.DS_Store
+*.log
+.env
+.env.local
