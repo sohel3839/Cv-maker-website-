@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Smart CV Maker Pro - create and download professional resumes.">
+<meta name="theme-color" content="#173b70">
+<title>Smart CV Maker Pro</title>
+<style>
+:root{--brand:#2457a7;--ink:#17243a;--muted:#64748b;--line:#dbe3ef;--bg:#f3f6fb;--paper:#fff}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:#173b70;color:#fff;padding:18px 16px;text-align:center}header h1{margin:0;font-size:24px}header p{margin:7px 0 0;color:#d9e7ff;font-size:13px}
+.wrap{max-width:1240px;margin:auto;padding:16px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+button,select{font:inherit}button{border:0;border-radius:8px;padding:11px 14px;background:var(--brand);color:white;font-weight:700;cursor:pointer}button.secondary{background:#e5edf8;color:#18345f}button.danger{background:#fff0f0;color:#a12b2b}button:disabled{opacity:.55;cursor:wait}
+.layout{display:grid;grid-template-columns:minmax(300px, .9fr) minmax(320px,1.1fr);gap:16px;align-items:start}
+.panel{background:#fff;border:1px solid var(--line);border-radius:13px;padding:16px;box-shadow:0 4px 18px #17243a0a}
+.panel h2{margin:0 0 14px;font-size:20px}.panel h3{font-size:15px;color:#1c4c91;margin:22px 0 10px;border-bottom:1px solid var(--line);padding-bottom:7px}
+.field{margin:10px 0}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:5px;color:#334155}
+input,textarea,select{width:100%;border:1px solid #cbd5e1;border-radius:7px;padding:10px;background:#fff;color:#17243a;font-size:14px;min-width:0}
+textarea{min-height:76px;resize:vertical}input:focus,textarea:focus,select:focus{outline:2px solid #bfdbfe;border-color:#3976c8}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.repeat{border:1px solid var(--line);border-radius:9px;padding:12px;margin:10px 0;background:#fbfdff}.repeat-head{display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:700;font-size:13px}
+.small{padding:7px 10px;font-size:12px}.hint{font-size:12px;color:var(--muted);line-height:1.5}.actions{display:flex;gap:8px;flex-wrap:wrap}.preview-wrap{position:sticky;top:8px}.preview-top{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:10px}.preview-top h2{margin:0}
+#resume{background:#fff;color:#222;width:100%;max-width:794px;min-height:1123px;margin:auto;padding:42px 48px;box-shadow:0 5px 22px #17243a16;overflow-wrap:anywhere}
+.cvhead{display:flex;gap:18px;align-items:center;border-bottom:3px solid var(--brand);padding-bottom:18px;margin-bottom:20px}
+#photoPreview{width:92px;height:110px;object-fit:cover;border-radius:5px;display:none}
+.cvname{font-size:29px;font-weight:800;color:#173b70;margin:0 0 5px}.cvrole{font-size:15px;color:var(--brand);margin-bottom:8px}.contactline{font-size:11px;color:#526071;line-height:1.7}
+.cvsection{margin:18px 0}.cvsection h3{font-size:13px;letter-spacing:1.2px;text-transform:uppercase;color:var(--brand);border-bottom:1px solid #d7e2f2;padding-bottom:6px;margin:0 0 9px}
+.cvsection p{font-size:12px;line-height:1.6;margin:4px 0;white-space:pre-wrap}.entry{margin:0 0 11px}.entry strong{font-size:12px}.entry .meta{font-size:11px;color:#64748b;margin:3px 0}.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{background:#edf3fc;color:#214d88;border-radius:4px;padding:5px 8px;font-size:11px}
+#resume.template-classic{font-family:Georgia,serif}.template-classic .cvhead{border-color:#444}.template-classic .cvname,.template-classic .cvsection h3,.template-classic .cvrole{color:#333}
+#resume.template-modern .cvhead{background:#173b70;color:white;padding:18px;margin:-42px -48px 20px}.template-modern .cvname,.template-modern .cvrole,.template-modern .contactline{color:white}
+#resume.template-minimal{box-shadow:none}.template-minimal .cvhead{border-bottom:1px solid #888}.template-minimal .cvsection h3{color:#333}
+#resume.template-creative .cvhead{border-left:7px solid var(--brand);padding-left:16px}
+.status{font-size:12px;color:#526071}
+footer{text-align:center;color:#64748b;font-size:12px;padding:20px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.preview-wrap{position:static}.wrap{padding:10px}#resume{padding:28px 22px;min-height:900px}.template-modern .cvhead{margin:-28px -22px 20px}}
+@media print{body{background:#fff}.no-print,header,footer,.editor,.preview-top{display:none!important}.wrap{padding:0;max-width:none}.layout{display:block}.preview-wrap{position:static}.panel{border:0;padding:0;box-shadow:none}#resume{box-shadow:none;max-width:none;width:100%;min-height:0;padding:15mm}.template-modern .cvhead{margin:-15mm -15mm 20px;padding:15mm}@page{size:A4;margin:0}}
+</style>
+</head>
+<body>
+<header><h1>Smart CV Maker Pro</h1><p>Create a professional resume • Live preview • Multiple downloads</p></header>
+<div class="wrap">
+  <div class="toolbar no-print">
+    <button onclick="downloadPDF()">Download PDF</button>
+    <button onclick="downloadDOCX()">Download DOCX</button>
+    <button class="secondary" onclick="downloadImage('png')">Download PNG</button>
+    <button class="secondary" onclick="downloadImage('jpeg')">Download JPG</button>
+    <button class="secondary" onclick="downloadTXT()">Download TXT</button>
+    <button class="secondary" onclick="downloadHTML()">Download HTML</button>
+    <span id="saveStatus" class="status">Draft saves in this browser.</span>
+  </div>
+  <div class="layout">
+    <section class="panel editor">
+      <h2>CV Information</h2>
+      <p class="hint">Fill in the sections you need. Leave irrelevant sections blank. Your draft is saved on this device's browser.</p>
+      <h3>Personal information</h3>
+      <div class="field"><label>Full name *</label><input id="fullName" placeholder="e.g. Alex Morgan"></div>
+      <div class="field"><label>Professional title</label><input id="title" placeholder="e.g. Marketing Executive"></div>
+      <div class="two">
+        <div class="field"><label>Email</label><input id="email" type="email" placeholder="alex@email.com"></div>
+        <div class="field"><label>Phone</label><input id="phone" placeholder="+880..."></div>
+      </div>
+      <div class="field"><label>Address / Location</label><input id="address" placeholder="City, Country"></div>
+      <div class="two">
+        <div class="field"><label>LinkedIn URL</label><input id="linkedin" placeholder="linkedin.com/in/..."></div>
+        <div class="field"><label>Portfolio / Website</label><input id="website" placeholder="yourwebsite.com"></div>
+      </div>
+      <div class="field"><label>Profile photo (optional)</label><input id="photo" type="file" accept="image/*"><p class="hint">Photo is processed in your browser. Use a clear, professional photo.</p></div>
+      <h3>Professional summary / career objective</h3>
+      <div class="field"><textarea id="summary" placeholder="Write 2–4 sentences about your experience, strengths and career goals."></textarea></div>
+      <h3>Work experience</h3>
+      <div id="experienceList"></div><button class="secondary small" onclick="addEntry('experience')">+ Add experience</button>
+      <h3>Education</h3>
+      <div id="educationList"></div><button class="secondary small" onclick="addEntry('education')">+ Add education</button>
+      <h3>Skills</h3>
+      <div class="field"><label>Skills (separate with commas)</label><textarea id="skills" placeholder="Communication, Excel, HTML, Project management"></textarea></div>
+      <h3>Projects</h3>
+      <div id="projectList"></div><button class="secondary small" onclick="addEntry('project')">+ Add project</button>
+      <h3>Certifications & training</h3>
+      <div id="certList"></div><button class="secondary small" onclick="addEntry('cert')">+ Add certification</button>
+      <h3>Languages</h3>
+      <div class="field"><textarea id="languages" placeholder="English – Fluent&#10;Bangla – Native"></textarea></div>
+      <h3>Awards & achievements</h3>
+      <div class="field"><textarea id="awards" placeholder="Award, organization and year"></textarea></div>
+      <h3>Volunteer experience</h3>
+      <div class="field"><textarea id="volunteer" placeholder="Organization, role and contribution"></textarea></div>
+      <h3>Publications & memberships</h3>
+      <div class="field"><textarea id="publications" placeholder="Publications, professional associations or memberships"></textarea></div>
+      <h3>Additional information</h3>
+      <div class="field"><textarea id="additional" placeholder="Hobbies, interests, driving licence or other relevant information"></textarea></div>
+      <h3>References</h3>
+      <div class="field"><textarea id="references" placeholder="Available upon request, or provide referee name, title and contact with their permission."></textarea></div>
+      <h3>Design settings</h3>
+      <div class="two">
+        <div class="field"><label>Template</label><select id="template"><option value="template-modern">Modern</option><option value="template-classic">Classic</option><option value="template-minimal">Minimal</option><option value="template-creative">Creative</option></select></div>
+        <div class="field"><label>Accent color</label><input type="color" id="accent" value="#2457a7"></div>
+      </div>
+      <div class="field"><label>Language of headings</label><select id="language"><option value="en">English</option><option value="bn">বাংলা</option></select></div>
+      <div class="actions"><button onclick="updatePreview()">Update preview</button><button class="danger" onclick="clearAll()">Clear all</button></div>
+      <p class="hint">Tip: Use truthful information, reverse chronological order for education and work, and tailor the CV to each job. Avoid adding sensitive personal details unless required.</p>
+    </section>
+    <section class="preview-wrap">
+      <div class="preview-top no-print"><h2>Live CV Preview</h2><span id="completion" class="status">0% complete</span></div>
+      <div class="panel"><article id="resume" class="template-modern">
+        <div class="cvhead"><img id="photoPreview" alt="Profile photo"><div><h1 class="cvname" id="pName">Your Name</h1><div class="cvrole" id="pTitle">Professional Title</div><div class="contactline" id="pContact">Email • Phone • Location</div></div></div>
+        <div id="pSections"></div>
+      </article></div>
+    </section>
+  </div>
+</div>
+<footer>Smart CV Maker Pro • Your information stays in this browser unless you choose to share or upload it.</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+<script>
+const simpleIds=['fullName','title','email','phone','address','linkedin','website','summary','skills','languages','awards','volunteer','publications','additional','references','template','accent','language'];
+const lists={experience:[],education:[],project:[],cert:[]};
+let photoData='';
+const labels={
+ en:{summary:'Professional Summary',experience:'Work Experience',education:'Education',skills:'Skills',project:'Projects',cert:'Certifications & Training',languages:'Languages',awards:'Awards & Achievements',volunteer:'Volunteer Experience',publications:'Publications & Memberships',additional:'Additional Information',references:'References'},
+ bn:{summary:'পেশাগত পরিচিতি',experience:'কর্ম অভিজ্ঞতা',education:'শিক্ষাগত যোগ্যতা',skills:'দক্ষতা',project:'প্রজেক্ট',cert:'সার্টিফিকেট ও প্রশিক্ষণ',languages:'ভাষা',awards:'পুরস্কার ও অর্জন',volunteer:'স্বেচ্ছাসেবী অভিজ্ঞতা',publications:'প্রকাশনা ও সদস্যপদ',additional:'অতিরিক্ত তথ্য',references:'রেফারেন্স'}
+};
+const entryFields={
+ experience:[['role','Job title'],['org','Company'],['dates','Dates'],['detail','Responsibilities / achievements']],
+ education:[['degree','Degree / qualification'],['school','Institution'],['dates','Dates'],['detail','Result / details']],
+ project:[['name','Project name'],['link','Project link'],['detail','Description']],
+ cert:[['name','Certificate / training'],['issuer','Issuing organization'],['dates','Date']]
+};
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function addEntry(type,data={}){const arr=lists[type];arr.push(Object.fromEntries(entryFields[type].map(([k])=>[k,data[k]||''])));renderEntryForms();updatePreview();}
+function removeEntry(type,i){lists[type].splice(i,1);renderEntryForms();updatePreview();}
+function renderEntryForms(){
+ Object.keys(lists).forEach(type=>{
+  const host=document.getElementById(type+'List');host.innerHTML='';
+  lists[type].forEach((item,i)=>{
+   const box=document.createElement('div');box.className='repeat';
+   const head=document.createElement('div');head.className='repeat-head';head.innerHTML='<span>'+type[0].toUpperCase()+type.slice(1)+' '+(i+1)+'</span>';
+   const del=document.createElement('button');del.className='danger small';del.textContent='Remove';del.onclick=()=>removeEntry(type,i);head.appendChild(del);box.appendChild(head);
+   entryFields[type].forEach(([key,label])=>{
+    const wrap=document.createElement('div');wrap.className='field';const lab=document.createElement('label');lab.textContent=label;const input=key==='detail'?document.createElement('textarea'):document.createElement('input');input.value=item[key]||'';input.placeholder=label;input.addEventListener('input',()=>{lists[type][i][key]=input.value;updatePreview();saveDraft();});wrap.append(lab,input);box.appendChild(wrap);
+   });host.appendChild(box);
+  });
+ });
+}
+function val(id){return document.getElementById(id).value.trim();}
+function section(title,content){if(!content)return '';return '<section class="cvsection"><h3>'+esc(title)+'</h3>'+content+'</section>';}
+function lines(text){return text.split(/\n+/).map(x=>x.trim()).filter(Boolean).map(x=>'<p>'+esc(x)+'</p>').join('');}
+function renderEntries(type){
+ return lists[type].map(item=>{
+  const f=entryFields[type],title=item[f[0][0]],sub=item[f[1][0]],date=item.dates||'',detail=item.detail||'';
+  const link=item.link?'<p>'+esc(item.link)+'</p>':'';
+  return '<div class="entry"><strong>'+esc(title||sub||'')+'</strong>'+(sub&&title?'<p>'+esc(sub)+'</p>':'')+(date?'<div class="meta">'+esc(date)+'</div>':'')+lines(detail)+link+'</div>';
+ }).join('');
+}
+function updatePreview(){
+ const name=val('fullName')||'Your Name',title=val('title')||'Professional Title';
+ document.getElementById('pName').textContent=name;document.getElementById('pTitle').textContent=title;
+ document.getElementById('pContact').textContent=[val('email'),val('phone'),val('address'),val('linkedin'),val('website')].filter(Boolean).join(' • ')||'Email • Phone • Location';
+ const L=labels[val('language')||'en'];
+ let html='';
+ html+=section(L.summary,lines(val('summary')));
+ html+=section(L.experience,renderEntries('experience'));
+ html+=section(L.education,renderEntries('education'));
+ const skills=val('skills').split(',').map(x=>x.trim()).filter(Boolean);
+ html+=section(L.skills,skills.length?'<div class="chips">'+skills.map(s=>'<span class="chip">'+esc(s)+'</span>').join('')+'</div>':'');
+ html+=section(L.project,renderEntries('project'));
+ html+=section(L.cert,renderEntries('cert'));
+ ['languages','awards','volunteer','publications','additional','references'].forEach(k=>html+=section(L[k],lines(val(k))));
+ document.getElementById('pSections').innerHTML=html;
+ const resume=document.getElementById('resume');resume.className=val('template')||'template-modern';document.documentElement.style.setProperty('--brand',val('accent')||'#2457a7');
+ const img=document.getElementById('photoPreview');if(photoData){img.src=photoData;img.style.display='block';}else{img.style.display='none';}
+ const filled=simpleIds.filter(id=>val(id)).length+Object.values(lists).reduce((n,a)=>n+a.filter(x=>Object.values(x).some(v=>v.trim())).length,0);
+ const total=simpleIds.length+8;document.getElementById('completion').textContent=Math.min(100,Math.round(filled/total*100))+'% filled (guide only)';
+}
+function collect(){const data={};simpleIds.forEach(id=>data[id]=val(id));data.lists=lists;data.photoData=photoData;return data;}
+let saveTimer;
+function saveDraft(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{try{localStorage.setItem('smartCVProDraft',JSON.stringify(collect()));document.getElementById('saveStatus').textContent='Draft saved on this device';}catch(e){document.getElementById('saveStatus').textContent='Could not save draft (storage full)';}},300);}
+function restoreDraft(){try{const d=JSON.parse(localStorage.getItem('smartCVProDraft')||'null');if(!d)return;simpleIds.forEach(id=>{if(d[id]!==undefined)document.getElementById(id).value=d[id];});Object.keys(lists).forEach(k=>lists[k]=Array.isArray(d.lists?.[k])?d.lists[k]:[]);photoData=d.photoData||'';renderEntryForms();updatePreview();}catch(e){}}
+simpleIds.forEach(id=>document.getElementById(id).addEventListener('input',()=>{updatePreview();saveDraft();}));
+document.getElementById('photo').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;if(!f.type.startsWith('image/')){alert('Please choose an image file.');return;}const r=new FileReader();r.onload=()=>{photoData=r.result;updatePreview();saveDraft();};r.readAsDataURL(f);});
+function filename(){return (val('fullName')||'My-CV').replace(/[^a-z0-9-_]+/gi,'-').replace(/^-|-$/g,'')||'My-CV';}
+function downloadBlob(blob,name){const a=document.createElement('a');const u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1500);}
+async function downloadPDF(){updatePreview();if(!window.html2canvas||!window.jspdf){alert('Export library did not load. Check your internet connection and reload.');return;}const btn=event?.currentTarget;try{if(btn)btn.disabled=true;const canvas=await html2canvas(document.getElementById('resume'),{scale:2,backgroundColor:'#ffffff',useCORS:true});const {jsPDF}=window.jspdf;const pdf=new jsPDF('p','mm','a4');const pageW=210,pageH=297;const img=canvas.toDataURL('image/jpeg',0.96);const imgH=canvas.height*pageW/canvas.width;let y=0;let remaining=imgH;while(remaining>0){if(y>0)pdf.addPage();pdf.addImage(img,'JPEG',0,-y,pageW,imgH);remaining-=pageH;y+=pageH;}pdf.save(filename()+'.pdf');}catch(e){alert('PDF export failed. Try Print → Save as PDF.');console.error(e);}finally{if(btn)btn.disabled=false;}}
+async function downloadImage(type){updatePreview();if(!window.html2canvas){alert('Image export library did not load. Check internet.');return;}try{const c=await html2canvas(document.getElementById('resume'),{scale:2,backgroundColor:'#ffffff',useCORS:true});const mime=type==='png'?'image/png':'image/jpeg';c.toBlob(b=>downloadBlob(b,filename()+'.'+(type==='png'?'png':'jpg')),mime,0.94);}catch(e){alert('Image export failed.');console.error(e);}}
+function plainText(){const d=collect(),out=[d.fullName,d.title,[d.email,d.phone,d.address,d.linkedin,d.website].filter(Boolean).join(' | '),''];const L=labels[d.language||'en'];function add(t,s){if(s){out.push(t.toUpperCase(),s,'');}}add(L.summary,d.summary);['experience','education','project','cert'].forEach(k=>{const arr=lists[k].map(x=>Object.values(x).filter(Boolean).join(' | ')).join('\n');add(L[k],arr);});add(L.skills,d.skills);['languages','awards','volunteer','publications','additional','references'].forEach(k=>add(L[k],d[k]));return out.join('\n');}
+function downloadTXT(){downloadBlob(new Blob([plainText()],{type:'text/plain;charset=utf-8'}),filename()+'.txt');}
+function downloadHTML(){const clone=document.getElementById('resume').cloneNode(true);const css=document.querySelector('style').textContent;const doc='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+esc(val('fullName')||'CV')+'</title><style>'+css+'</style></head><body>'+clone.outerHTML+'</body></html>';downloadBlob(new Blob([doc],{type:'text/html;charset=utf-8'}),filename()+'.html');}
+async function downloadDOCX(){
+ if(!window.docx){alert('DOCX library did not load. Check your internet connection and reload.');return;}
+ const {Document,Packer,Paragraph,TextRun,HeadingLevel}=window.docx;const d=collect();const children=[];
+ const add=(s,bold=false,size=22)=>{if(s)children.push(new Paragraph({children:[new TextRun({text:s,bold,size})],spacing:{after:100}}));};
+ children.push(new Paragraph({text:d.fullName||'Your Name',heading:HeadingLevel.TITLE}));
+ add(d.title, true, 26);add([d.email,d.phone,d.address,d.linkedin,d.website].filter(Boolean).join(' | '));
+ function heading(s){children.push(new Paragraph({text:s,heading:HeadingLevel.HEADING_1,spacing:{before:240,after:100}}));}
+ function body(s){if(s)children.push(new Paragraph({text:s,spacing:{after:100}}));}
+ const L=labels[d.language||'en'];if(d.summary){heading(L.summary);body(d.summary);}
+ function entries(k){lists[k].forEach(x=>{const vals=entryFields[k].map(([key])=>x[key]).filter(Boolean);body(vals.join(' | '));});}
+ [['experience',L.experience],['education',L.education],['project',L.project],['cert',L.cert]].forEach(([k,t])=>{if(lists[k].some(x=>Object.values(x).some(Boolean))){heading(t);entries(k);}});
+ if(d.skills){heading(L.skills);body(d.skills);}
+ ['languages','awards','volunteer','publications','additional','references'].forEach(k=>{if(d[k]){heading(L[k]);body(d[k]);}});
+ try{const doc=new Document({sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:900,right:900,bottom:900,left:900}}},children}]});const blob=await Packer.toBlob(doc);downloadBlob(blob,filename()+'.docx');}catch(e){alert('DOCX export failed.');console.error(e);}
+}
+function clearAll(){if(!confirm('Clear all CV information and saved draft?'))return;simpleIds.forEach(id=>document.getElementById(id).value='');Object.keys(lists).forEach(k=>lists[k]=[]);photoData='';document.getElementById('photo').value='';renderEntryForms();localStorage.removeItem('smartCVProDraft');updatePreview();document.getElementById('saveStatus').textContent='Draft cleared';}
+restoreDraft();renderEntryForms();updatePreview();
+</script>
+</body>
+</html>
